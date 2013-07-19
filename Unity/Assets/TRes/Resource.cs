@@ -60,7 +60,7 @@ namespace Tuner.Resource
 
 				public void Notify (bool error, string message)
 				{
-						mCallbackEvt.Invoke (GetValue (), error, message);
+						mCallbackEvt.Invoke (error ? null : GetValue (), error, message);
 						clearCallback ();
 				}
 		

@@ -80,14 +80,16 @@ namespace Tuner.Resource
 				{
 						List<string> deleteList = null;
 						//check downloading
+
 						foreach (KeyValuePair<string, WWW> downloading_item in mDownloadingWWW) {
-				
+								
 								//check error
 								if (downloading_item.Value.error != null) {
-					
+
 										Resource res = find (downloading_item.Value.url);
 										if (res != null) {
 												mDownloading.Remove (res.mUrl);
+												Debug.Log (downloading_item.Value.error);
 												res.Notify (true, downloading_item.Value.error);
 										}
 										if (deleteList == null) {
@@ -98,7 +100,7 @@ namespace Tuner.Resource
 								}
 								//check done
 								else if (downloading_item.Value.isDone) {
-					
+
 										Resource res = find (downloading_item.Value.url);
 										if (res != null) {
 												mDownloading.Remove (res.mUrl);
@@ -112,14 +114,19 @@ namespace Tuner.Resource
 										}
 										deleteList.Add (downloading_item.Key);
 								}
-								//delete WWW
+
+				
+						}
+
+						//delete WWW
+						if (deleteList != null) {
 								foreach (string delete_Item in deleteList) {
 										mDownloadingWWW [delete_Item].Dispose ();
 										mDownloadingWWW.Remove (delete_Item);
 								}
 						}
 				}
-
+		
 				private void process_Remove ()
 				{
 						foreach (string item in mRemoveList) {
