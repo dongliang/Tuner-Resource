@@ -6,15 +6,15 @@ public class test : MonoBehaviour
 {
 
 		// Use this for initialization
-	void Awake()
-	{
+		void Awake ()
+		{
+				ResourceMgr.Instance.AddRequest ("localhost/test.unity3d","ab", ResourceCallback);
+		}
 
-			ResourceMgr.Instance.AddRequest("localhost/test.unity3d",new ABResource(),ResourceCallback);
-	}
 		void Start ()
 		{
 	
-	}
+		}
 	
 		// Update is called once per frame
 		void Update ()
@@ -22,11 +22,9 @@ public class test : MonoBehaviour
 				ResourceMgr.Instance.Update ();
 		}
 
-		public void ResourceCallback (System.Object value, bool error, string message)
+		public void ResourceCallback (System.Object value, E_Resource_ErrorCode errorCode, string message)
 		{
-
-
-				if (gameObject != null && !error) {
+				if (gameObject != null && errorCode == E_Resource_ErrorCode.Success) {
 						GameObject.Instantiate (value as GameObject);
 				}
 		}

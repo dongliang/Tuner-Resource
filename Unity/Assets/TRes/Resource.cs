@@ -2,13 +2,24 @@ using UnityEngine;
 
 namespace Tuner.Resource
 {
-		public delegate void ResourceCallback (System.Object value,bool error,string message);
+	public delegate void ResourceCallback (System.Object value,E_Resource_ErrorCode result ,string message);
 
 		public enum E_Resource_State
 		{
 				waiting,
 				downloading,
 				done
+		}
+
+		public enum E_Resource_ErrorCode
+		{
+				Success,
+				Cancel,
+				Fail,
+				Url_Null,
+				Resource_Null
+				
+				
 		}
 
 		public class Resource
@@ -58,9 +69,9 @@ namespace Tuner.Resource
 						}
 				}
 
-				public void Notify (bool error, string message)
+		public void Notify (E_Resource_ErrorCode result, string message)
 				{
-						mCallbackEvt.Invoke (error ? null : GetValue (), error, message);
+			mCallbackEvt.Invoke (result == E_Resource_ErrorCode.Success ?GetValue (): null , result, message);
 						clearCallback ();
 				}
 		

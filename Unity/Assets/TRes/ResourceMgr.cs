@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tuner.Resource
-{		
+{	
 		public class ResourceMgr:Singleton<ResourceMgr>
 		{
 				//list
@@ -12,6 +12,12 @@ namespace Tuner.Resource
 				private Dictionary<string,WWW> mDownloadingWWW = new Dictionary<string, WWW> ();
 				private const int maxProcessors = 1;
 				private List<string> mRemoveList = new List<string> ();
+				Tuner_Resource_Adapter mAdapter = new Tuner_Resource_Adapter ();
+
+				public void Init (Tuner_Resource_Adapter adapter)
+				{
+						mAdapter = adapter;
+				}
 				
 				///remove resource at any time.
 				public void Remove (string url)
@@ -19,18 +25,22 @@ namespace Tuner.Resource
 						mRemoveList.Add (url);
 				}
 				/// Add a resource load request, it will call the callback at the resource load complete.or error.
-				public void AddRequest (string url, Resource resource, ResourceCallback completeCallback)
+				public void AddRequest (string url, string resourceType, ResourceCallback completeCallback)
 				{
+
+						Resource resource = null;
+						mAdapter.CreateResource (resourceType, out resource);
+
 						//check param
 						if (string.IsNullOrEmpty (url)) {
 								if (completeCallback != null) {
-										completeCallback.Invoke (null, true, "url is null");
+										completeCallback.Invoke (null, E_Resource_ErrorCode.Url_Null, "url is null");
 								}
 								return;
 						}
 						if (resource == null) {
 								if (completeCallback != null) {
-										completeCallback.Invoke (null, true, "Resource object is null");
+										completeCallback.Invoke (null, E_Resource_ErrorCode.Resource_Null, "Resource object is null");
 								}
 								return;
 						}
@@ -49,9 +59,20 @@ namespace Tuner.Resource
 
 						//notify cached.
 						if (temp.mState == E_Resource_State.done) {
-								temp.Notify (false, "Resource download Success.");
+								temp.Notify (E_Resource_ErrorCode.Success, "Resource download Success.");
 						}
 						
+				}
+
+				public float progress (string url)
+				{
+						float result = 0;
+						//find
+						WWW www = null;
+						if (mDownloadingWWW.TryGetValue (url, out www)) {
+								result = www.progress;
+						}
+						return result;
 				}
 				
 				public void Update ()
@@ -90,7 +111,7 @@ namespace Tuner.Resource
 										if (res != null) {
 												mDownloading.Remove (res.mUrl);
 												Debug.Log (downloading_item.Value.error);
-												res.Notify (true, downloading_item.Value.error);
+												res.Notify (E_Resource_ErrorCode.Fail, downloading_item.Value.error);
 										}
 										if (deleteList == null) {
 												deleteList = new List<string> ();
@@ -106,7 +127,7 @@ namespace Tuner.Resource
 												mDownloading.Remove (res.mUrl);
 												res.OnDownloadComplete (downloading_item.Value);
 												mCached.Add (res.mUrl, res);
-												res.Notify (false, "Resource download Success.");
+												res.Notify (E_Resource_ErrorCode.Success, "Resource download Success.");
 										}
 					
 										if (deleteList == null) {
@@ -162,13 +183,17 @@ namespace Tuner.Resource
 						if (temp != null) {
 								switch (temp.mState) {
 								case E_Resource_State.waiting:
+										temp.Notify (E_Resource_ErrorCode.Cancel, "Cancel at Waiting");
 										mWaiting.Remove (url);
+										
 										break;
 								case E_Resource_State.downloading:
 										WWW tempWWW = null;
 										if (mDownloadingWWW.TryGetValue (url, out tempWWW)) {
 												tempWWW.Dispose ();
 												mDownloadingWWW.Remove (url);
+												temp.Notify (E_Resource_ErrorCode.Cancel, "Cancel at Downlading");	
+												mDownloading.Remove (url);
 										}	
 										break;
 								case E_Resource_State.done:
