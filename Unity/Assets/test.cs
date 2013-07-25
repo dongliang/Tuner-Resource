@@ -1,14 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using Tuner.Resource;
+using System.IO;
 
 public class test : MonoBehaviour
 {
+		public	TextMesh tm;
 
 		// Use this for initialization
 		void Awake ()
 		{
-				ResourceMgr.Instance.AddRequest ("localhost/test.unity3d","ab", ResourceCallback);
+				Debug.Log (Application.dataPath);
+				ResourceMgr.Instance.AddRequest (Tuner.Resource.LocationHelper.GetLoadFileURL ("/Assets/test1.unity3d"), "ab", ResourceCallback);
 		}
 
 		void Start ()
@@ -19,6 +22,7 @@ public class test : MonoBehaviour
 		// Update is called once per frame
 		void Update ()
 		{
+			
 				ResourceMgr.Instance.Update ();
 		}
 
