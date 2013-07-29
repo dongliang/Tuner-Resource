@@ -57,7 +57,7 @@ namespace Tuner.Resource
 				{
 						//Application.dataPath = Unity/Assets;
 						string unityPath = Application.dataPath.Substring (0, Application.dataPath.Length - 7);
-						string cachePath = unityPath + "/Bundles";
+						string cachePath = unityPath + "/bundles";
 						return cachePath;
 				}
 
@@ -65,21 +65,21 @@ namespace Tuner.Resource
 				{
 						//Application.dataPath = Unity/Assets;
 						string unityPath = Application.dataPath.Substring (0, Application.dataPath.Length - 7);
-						string cachePath = unityPath + "/Caches";
+						string cachePath = unityPath + "/caches";
 						return cachePath;
 				}
 
 				static string GetBundlePath_Mac ()
 				{
 						//Application.dataPath = Content;
-						string bundlePath = Application.dataPath + "/Bundles";
+						string bundlePath = Application.dataPath + "/bundles";
 						return bundlePath;
 				}
 
 				static string GetCachePath_Mac ()
 				{
 						//Application.dataPath = Content;
-						string cachePath = Application.dataPath + "/Caches";
+						string cachePath = Application.dataPath + "/caches";
 						return cachePath;
 				}
 
