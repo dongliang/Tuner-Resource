@@ -12,9 +12,9 @@ namespace Tuner.Resource
 				private Dictionary<string,WWW> mDownloadingWWW = new Dictionary<string, WWW> ();
 				private const int maxProcessors = 1;
 				private List<string> mRemoveList = new List<string> ();
-				Tuner_Resource_Adapter mAdapter = new Tuner_Resource_Adapter ();
+				TResAdapter mAdapter = new TResAdapter ();
 
-				public void Init (Tuner_Resource_Adapter adapter)
+				public void Init (TResAdapter adapter)
 				{
 						mAdapter = adapter;
 				}

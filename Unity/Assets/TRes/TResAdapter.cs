@@ -1,6 +1,6 @@
 namespace Tuner.Resource
 {
-		public class Tuner_Resource_Adapter
+		public class TResAdapter
 		{
 				public virtual void CreateResource (string resourceType, out Resource result)
 				{
