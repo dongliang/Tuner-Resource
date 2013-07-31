@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-class GenerateResourceInfo
+class GenerateVersionInfo
 {
 		const string menuTitle = "Tuner/Generate Resources Info Json";
 
@@ -19,7 +19,7 @@ class GenerateResourceInfo
 				ignore (ref filelist, ignoreKeys);
 
 				//json
-				Tuner.Resource.UpdateVersionInfo versionInfo = new Tuner.Resource.UpdateVersionInfo ();
+				Tuner.Resource.VersionInfo versionInfo = new Tuner.Resource.VersionInfo ();
 
 				foreach (FileInfo item in filelist) {
 						FileStream fs = File.OpenRead (item.FullName);

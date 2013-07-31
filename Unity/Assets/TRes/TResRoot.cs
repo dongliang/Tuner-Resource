@@ -58,17 +58,17 @@ namespace Tuner.Resource
 				//update
 				public void CheckUpdate (CheckUpdateCallback callback)
 				{
-						Updater.Instance.Check (callback);
+						UpdateMgr.Instance.Check (callback);
 				}
 
 				public void StartUpdate (ResourceGroupCallback callback)
 				{
-						Updater.Instance.Start (callback);
+						UpdateMgr.Instance.Start (callback);
 				}
 				
 				public void RelaseUpdate ()
 				{
-						Updater.Instance.Relase ();
+						UpdateMgr.Instance.Relase ();
 				}
 				
 				//group

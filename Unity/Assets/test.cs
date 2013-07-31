@@ -12,7 +12,7 @@ public class test : MonoBehaviour
 		{
 				//Debug.Log (Application.dataPath);
 				//ResourceMgr.Instance.AddRequest (Tuner.Resource.LocationHelper.GetLoadFileURL ("/Assets/test1.unity3d"), "ab", ResourceCallback);
-				Updater.Instance.Check (CheckUpdateCallback);
+				TResRoot.Instance.CheckUpdate (CheckUpdateCallback);
 				
 		}
 
@@ -21,7 +21,7 @@ public class test : MonoBehaviour
 				if (error == E_CheckUpdate_ErrorCode.haveUpdate) {
 						Debug.Log ("update file: " + count.ToString ());
 						Debug.Log ("total size:" + size.ToString ());
-						Updater.Instance.Start (UpdateDoneCallback);
+						TResRoot.Instance.StartUpdate (UpdateDoneCallback);
 				} else {
 						Debug.Log (error);
 				}
@@ -48,7 +48,7 @@ public class test : MonoBehaviour
 		void Update ()
 		{
 			
-				ResourceMgr.Instance.Update ();
+				TResRoot.Instance.Update ();
 		}
 
 		public void ResourceCallback (System.Object value, E_Resource_ErrorCode errorCode, string message)

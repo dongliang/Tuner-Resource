@@ -11,9 +11,21 @@ namespace Tuner.Resource
 				public long size;
 		}
 
-		public class UpdateVersionInfo
+		public class VersionInfo
 		{
 				public Dictionary<string,UpdateFileInfo> infos = new Dictionary<string, UpdateFileInfo> ();
+				
+				public VersionInfo ()
+				{
+				}
+
+				public VersionInfo (string json)
+				{
+						if (infos == null) {
+								infos = new Dictionary<string, UpdateFileInfo> ();
+						}
+						Deserialize (json);
+				}
 
 				public void Deserialize (string value)
 				{
