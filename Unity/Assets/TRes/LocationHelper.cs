@@ -8,8 +8,19 @@ namespace Tuner.Resource
 		{
 				public const string FilePrefix = "file://";
 				public const string HttpPrefix = "http://";
+				static INetPathHolder mNetPathHolder = new TResAdapter ();
 
-				public static string GetBundlePath ()
+				static public void Init (INetPathHolder holder)
+				{
+						mNetPathHolder = holder;
+				}
+
+				static public string GetNetPath ()
+				{
+						return mNetPathHolder.GetNetPath ();
+				}
+
+				static public string GetBundlePath ()
 				{
 						string bundlePath = GetBundlePath_Editor ();
 						switch (Application.platform) {
@@ -23,22 +34,6 @@ namespace Tuner.Resource
 						return bundlePath;
 				}
 				
-				/// <summary>
-				/// Gets the file URL. first check cache path. if file not exist, use the bundle path.
-				/// </summary>
-				/// <returns>The file URL.</returns>
-				/// <param name="relativePath">Relative path.the first character is '/'</param>
-				public static string GetLoadFileURL (string relativePath)
-				{		
-						string loadFilePath = GetCachePath () + relativePath;
-
-						//check if exsit.
-						if (!File.Exists (loadFilePath)) {
-								loadFilePath = GetBundlePath () + relativePath;
-						}
-						return FilePrefix + loadFilePath;
-				}
-
 				public static string GetCachePath ()
 				{
 						string cachePath = GetCachePath_Editor ();
@@ -51,6 +46,22 @@ namespace Tuner.Resource
 								break;
 						}
 						return cachePath;
+				}
+
+				/// <summary>
+				/// Gets the file URL. first check cache path. if file not exist, use the bundle path.
+				/// </summary>
+				/// <returns>The file URL.</returns>
+				/// <param name="relativePath">Relative path.the first character is '/'</param>
+				public static string GetLoadFileURL (string relativePath)
+				{		
+						string loadFilePath = GetCachePath () + relativePath;
+			
+						//check if exsit.
+						if (!File.Exists (loadFilePath)) {
+								loadFilePath = GetBundlePath () + relativePath;
+						}
+						return FilePrefix + loadFilePath;
 				}
 
 				static string GetBundlePath_Editor ()
@@ -95,6 +106,17 @@ namespace Tuner.Resource
 						string bundlePath = GetBundlePath_IOS ();
 						string cachePath = bundlePath.Substring (0, bundlePath.LastIndexOf ('/')) + "/Library/Caches";
 						return cachePath;
+				}
+
+				public static string CreateDirectory (string path)
+				{
+			
+						if (System.IO.Directory.Exists (path) == false) {
+								UnityEngine.Debug.Log ("Create:" + path);
+								System.IO.Directory.CreateDirectory (path);
+								//AssetDatabase.Refresh ();
+						}
+						return path;
 				}
 
 

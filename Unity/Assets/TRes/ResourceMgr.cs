@@ -12,11 +12,11 @@ namespace Tuner.Resource
 				private Dictionary<string,WWW> mDownloadingWWW = new Dictionary<string, WWW> ();
 				private const int maxProcessors = 1;
 				private List<string> mRemoveList = new List<string> ();
-				TResAdapter mAdapter = new TResAdapter ();
+				IResourceBuilder mResourceBuilder = new TResAdapter ();
 
-				public void Init (TResAdapter adapter)
+				public void Init (IResourceBuilder adapter)
 				{
-						mAdapter = adapter;
+						mResourceBuilder = adapter;
 				}
 				
 				///remove resource at any time.
@@ -29,18 +29,18 @@ namespace Tuner.Resource
 				{
 
 						Resource resource = null;
-						mAdapter.CreateResource (resourceType, out resource);
+						mResourceBuilder.CreateResource (resourceType, out resource);
 
 						//check param
 						if (string.IsNullOrEmpty (url)) {
 								if (completeCallback != null) {
-										completeCallback.Invoke (null, E_Resource_ErrorCode.Url_Null, "url is null");
+										completeCallback.Invoke (url,null, E_Resource_ErrorCode.Url_Null, "url is null");
 								}
 								return;
 						}
 						if (resource == null) {
 								if (completeCallback != null) {
-										completeCallback.Invoke (null, E_Resource_ErrorCode.Resource_Null, "Resource object is null");
+										completeCallback.Invoke (url,null, E_Resource_ErrorCode.Resource_Null, "Resource object is null");
 								}
 								return;
 						}
@@ -55,7 +55,7 @@ namespace Tuner.Resource
 						}
 						
 						//add callback
-						temp.addCallback (completeCallback);
+						temp.AddCallback (completeCallback);
 
 						//notify cached.
 						if (temp.mState == E_Resource_State.done) {
@@ -64,7 +64,7 @@ namespace Tuner.Resource
 						
 				}
 
-				public float progress (string url)
+				public float Progress (string url)
 				{
 						float result = 0;
 						//find
@@ -110,7 +110,8 @@ namespace Tuner.Resource
 										Resource res = find (downloading_item.Value.url);
 										if (res != null) {
 												mDownloading.Remove (res.mUrl);
-												Debug.Log (downloading_item.Value.error);
+												
+												Debug.Log (res.mUrl + downloading_item.Value.error);
 												res.Notify (E_Resource_ErrorCode.Fail, downloading_item.Value.error);
 										}
 										if (deleteList == null) {

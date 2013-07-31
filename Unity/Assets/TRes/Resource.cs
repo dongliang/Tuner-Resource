@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Tuner.Resource
 {
-	public delegate void ResourceCallback (System.Object value,E_Resource_ErrorCode result ,string message);
+	public delegate void ResourceCallback (string url,System.Object value,E_Resource_ErrorCode result ,string message);
 
 		public enum E_Resource_State
 		{
@@ -18,8 +18,6 @@ namespace Tuner.Resource
 				Fail,
 				Url_Null,
 				Resource_Null
-				
-				
 		}
 
 		public class Resource
@@ -51,7 +49,7 @@ namespace Tuner.Resource
 				}
 				
 				//callback
-				public void addCallback (ResourceCallback callback)
+				public void AddCallback (ResourceCallback callback)
 				{
 						if (callback == null) {
 								return;
@@ -60,7 +58,7 @@ namespace Tuner.Resource
 						}
 				}
 		
-				public void removeCallback (ResourceCallback callback)
+				public void RemoveCallback (ResourceCallback callback)
 				{
 						if (callback == null) {
 								return;
@@ -71,7 +69,7 @@ namespace Tuner.Resource
 
 		public void Notify (E_Resource_ErrorCode result, string message)
 				{
-			mCallbackEvt.Invoke (result == E_Resource_ErrorCode.Success ?GetValue (): null , result, message);
+			mCallbackEvt.Invoke (mUrl,result == E_Resource_ErrorCode.Success ?GetValue (): null , result, message);
 						clearCallback ();
 				}
 		

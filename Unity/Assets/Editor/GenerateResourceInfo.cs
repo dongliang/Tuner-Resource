@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Text;
 
 class GenerateResourceInfo
 {
-	const string menuTitle = "Tuner/Generate Resources Info Json";
+		const string menuTitle = "Tuner/Generate Resources Info Json";
 
 		[MenuItem(menuTitle)]
 		static void GenJson ()
@@ -19,20 +19,17 @@ class GenerateResourceInfo
 				ignore (ref filelist, ignoreKeys);
 
 				//json
-				Dictionary<string,object> json_root = new Dictionary<string, object> ();
-				List<object> json_assetlist = new List<object> ();
-				json_root.Add ("assets", json_assetlist);
+				Tuner.Resource.UpdateVersionInfo versionInfo = new Tuner.Resource.UpdateVersionInfo ();
 
-				//ergodic
 				foreach (FileInfo item in filelist) {
-						//Debug.Log (item);
-						string subPath = item.FullName.Substring (bundlePath.Length);
-
-						Dictionary<string,object> tempDic = new Dictionary<string, object> ();
-						tempDic.Add (subPath, getMD5 (item.FullName));
-						json_assetlist.Add (tempDic);
+						FileStream fs = File.OpenRead (item.FullName);
+						Tuner.Resource.UpdateFileInfo temp = new Tuner.Resource.UpdateFileInfo ();
+						temp.md5 = getMD5 (fs);
+						temp.size = fs.Length;
+						temp.subPath = item.FullName.Substring (bundlePath.Length);
+						versionInfo.infos.Add (temp.subPath, temp);
 				}
-				string json = MiniJSON.Json.Serialize (json_root);
+				string json = versionInfo.Serialize ();
 
 				WriteFile (bundlePath + "/Info/resourcesinfo.json", json);
 		}
@@ -50,11 +47,11 @@ class GenerateResourceInfo
 				File.WriteAllText (path, content);
 		}
 
-		static	string  getMD5 (string path)
+		static	string  getMD5 (FileStream fs)
 		{
-				FileStream fs = File.OpenRead (path);
-				System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider ();
 		
+				System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider ();
+
 				byte[] md5Bytes = md5.ComputeHash (fs);
 				StringBuilder sb = new StringBuilder ();
 		

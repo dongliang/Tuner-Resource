@@ -1,6 +1,6 @@
 namespace Tuner.Resource
 {
-		public class TResAdapter
+		public class TResAdapter:IResourceBuilder,INetPathHolder
 		{
 				public virtual void CreateResource (string resourceType, out Resource result)
 				{
@@ -11,10 +11,18 @@ namespace Tuner.Resource
 						case "bin":
 								result = new BinaryResource ();
 								break;
+						case "txt":
+								result = new TextResource ();
+								break;
 						default:
 								result = null;
 								break;
 						}
+				}
+
+				public virtual string GetNetPath ()
+				{
+						return "localhost";
 				}
 		}
 }

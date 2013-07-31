@@ -39,14 +39,19 @@ namespace Tuner.Resource
 				int count = 0;
 				int current = 0;
 
+				public  ResourceGroup (ResourceGroupCallback callback)
+				{
+						mCallback = callback;
+				}
+
 				public void AddRequest (string url, string resourceType, ResourceCallback completeCallback)
 				{
 						if (string.IsNullOrEmpty (url)) {
-								completeCallback.Invoke (null, Tuner.Resource.E_Resource_ErrorCode.Url_Null, "can not add to group,url is null");
+								completeCallback.Invoke (url,null, Tuner.Resource.E_Resource_ErrorCode.Url_Null, "can not add to group,url is null");
 								return;
 						}
 						if (string.IsNullOrEmpty (resourceType)) {
-								completeCallback.Invoke (null, Tuner.Resource.E_Resource_ErrorCode.Resource_Null, "can not add to group,resource is null");
+								completeCallback.Invoke (url,null, Tuner.Resource.E_Resource_ErrorCode.Resource_Null, "can not add to group,resource is null");
 								return;
 						}
 						if (mState == E_ResourceGroup_State.prepare) {
@@ -60,7 +65,7 @@ namespace Tuner.Resource
 								count++;
 
 						} else {
-								completeCallback (null, Tuner.Resource.E_Resource_ErrorCode.Fail, "can't add to group, group state is not propare.");
+								completeCallback (url,null, Tuner.Resource.E_Resource_ErrorCode.Fail, "can't add to group, group state is not propare.");
 						}
 				}
 
@@ -68,7 +73,7 @@ namespace Tuner.Resource
 				{
 						float currentItemProgress = 0;
 						if (downloading != null) {
-								currentItemProgress = ResourceMgr.Instance.progress (downloading);
+								currentItemProgress = ResourceMgr.Instance.Progress (downloading);
 						}
 						GroupProgress temp = new GroupProgress ();
 						temp.count = count;
@@ -95,14 +100,14 @@ namespace Tuner.Resource
 		
 				public void Start ()
 				{
-						if (sendRequest ()) {
+						if (SendRequest ()) {
 								mState = E_ResourceGroup_State.start;
 						} else {
 								Debug.Log ("can not start,group is null.");
 						}
 				}
 
-				bool sendRequest ()
+				bool SendRequest ()
 				{
 						if (mWaitings.Count > 0) {
 								RequestInfo temp = mRequestInfos [mWaitings [0]];
@@ -116,11 +121,11 @@ namespace Tuner.Resource
 						}
 				}
 
-				void ResourceCallback_group (System.Object value, E_Resource_ErrorCode result, string message)
+				void ResourceCallback_group (string url,System.Object value, E_Resource_ErrorCode result, string message)
 				{	
 						//call back function
 						if (mRequestInfos [downloading].completeCallback != null) {
-								mRequestInfos [downloading].completeCallback.Invoke (value, result, message);
+				mRequestInfos [downloading].completeCallback.Invoke (url,value, result, message);
 						}
 
 						//add downloading to error or done.
@@ -145,7 +150,7 @@ namespace Tuner.Resource
 								}
 
 						} else {
-								if (!sendRequest ()) {
+								if (!SendRequest ()) {
 										Debug.Log ("Error,mWating not enough. current:" + current.ToString () + "count: " + count.ToString ());
 								}
 						}

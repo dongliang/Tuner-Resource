@@ -10,8 +10,33 @@ public class test : MonoBehaviour
 		// Use this for initialization
 		void Awake ()
 		{
-				Debug.Log (Application.dataPath);
-				ResourceMgr.Instance.AddRequest (Tuner.Resource.LocationHelper.GetLoadFileURL ("/Assets/test1.unity3d"), "ab", ResourceCallback);
+				//Debug.Log (Application.dataPath);
+				//ResourceMgr.Instance.AddRequest (Tuner.Resource.LocationHelper.GetLoadFileURL ("/Assets/test1.unity3d"), "ab", ResourceCallback);
+				Updater.Instance.Check (CheckUpdateCallback);
+				
+		}
+
+		public void CheckUpdateCallback (E_CheckUpdate_ErrorCode error, int count, long size, string msg)
+		{
+				if (error == E_CheckUpdate_ErrorCode.haveUpdate) {
+						Debug.Log ("update file: " + count.ToString ());
+						Debug.Log ("total size:" + size.ToString ());
+						Updater.Instance.Start (UpdateDoneCallback);
+				} else {
+						Debug.Log (error);
+				}
+		}
+
+		public void UpdateDoneCallback (int count, string[] success, string[] error)
+		{
+				Debug.Log ("update count : " + count.ToString ());
+				Debug.Log ("success:");
+				foreach (string item in success) {
+						Debug.Log (item);
+				}
+				foreach (string item in error) {
+						Debug.Log (item);
+				}
 		}
 
 		void Start ()
