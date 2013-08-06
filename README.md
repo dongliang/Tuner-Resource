@@ -15,4 +15,4 @@ Easy to manage resource in Unity3d.
              1.Unified interface to get platforms path. Bundle path,cache path.
         Update:
              1.Generate the version information. contains asset's size and md5.
-             2.Compare the Asset Web Server Version,load the lastest assets.
+             2.Compare the Asset Web Server Version,download the lastest assets.
