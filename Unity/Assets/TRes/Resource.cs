@@ -1,8 +1,13 @@
+/*
+   Tunner Resource - Easy to manage resource in Unity3d. 
+   e-mail : dongliang17@126.com
+   project: https://github.com/dongliang/Tuner-Resource
+*/
 using UnityEngine;
 
 namespace Tuner.Resource
 {
-	public delegate void ResourceCallback (string url,System.Object value,E_Resource_ErrorCode result ,string message);
+		public delegate void ResourceCallback (string url,System.Object value,E_Resource_ErrorCode result,string message);
 
 		public enum E_Resource_State
 		{
@@ -67,9 +72,9 @@ namespace Tuner.Resource
 						}
 				}
 
-		public void Notify (E_Resource_ErrorCode result, string message)
+				public void Notify (E_Resource_ErrorCode result, string message)
 				{
-			mCallbackEvt.Invoke (mUrl,result == E_Resource_ErrorCode.Success ?GetValue (): null , result, message);
+						mCallbackEvt.Invoke (mUrl, result == E_Resource_ErrorCode.Success ? GetValue () : null, result, message);
 						clearCallback ();
 				}
 		
