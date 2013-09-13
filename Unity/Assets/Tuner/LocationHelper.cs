@@ -6,22 +6,22 @@
 using UnityEngine;
 using System.IO;
 
-namespace Tuner.Resource
+namespace Tuner
 {
 		public class LocationHelper
 		{
 				public const string FilePrefix = "file://";
 				public const string HttpPrefix = "http://";
-				static INetPathHolder mNetPathHolder = new TResAdapter ();
+				static string mNetPath = "";
 
-				static public void Init (INetPathHolder holder)
+				static public void Init (string netPath)
 				{
-						mNetPathHolder = holder;
+						mNetPath = netPath;
 				}
 
 				static public string GetNetPath ()
 				{
-						return mNetPathHolder.GetNetPath ();
+						return mNetPath;
 				}
 
 				static public string GetBundlePath ()

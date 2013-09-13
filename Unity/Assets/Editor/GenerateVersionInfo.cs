@@ -18,7 +18,7 @@ class GenerateVersionInfo
 		{
 
 				List<FileInfo> filelist = new List<FileInfo> ();
-				string bundlePath = Tuner.Resource.LocationHelper.GetBundlePath ();
+				string bundlePath = Tuner.LocationHelper.GetBundlePath ();
 				GetFileInfo (ref filelist, bundlePath, true);
 				string[] ignoreKeys = new string[]{"DS_Store","resourcesinfo.json"};
 				ignore (ref filelist, ignoreKeys);

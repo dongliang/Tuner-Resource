@@ -14,7 +14,7 @@ namespace Tuner.Resource
 				public void Init (TResAdapter adapter)
 				{
 						ResourceMgr.Instance.Init (adapter);
-						LocationHelper.Init (adapter);
+						LocationHelper.Init (adapter.GetNetPath());
 				}
 
 				public void Update ()

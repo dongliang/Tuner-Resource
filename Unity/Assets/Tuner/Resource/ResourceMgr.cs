@@ -17,7 +17,7 @@ namespace Tuner.Resource
 				private Dictionary<string,WWW> mDownloadingWWW = new Dictionary<string, WWW> ();
 				private const int maxProcessors = 1;
 				private List<string> mRemoveList = new List<string> ();
-				IResourceBuilder mResourceBuilder = new TResAdapter ();
+				IResourceBuilder mResourceBuilder = null;
 
 				public void Init (IResourceBuilder adapter)
 				{

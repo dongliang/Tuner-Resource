@@ -16,7 +16,7 @@ class ExportTestPrefab
 		{
 				foreach (GameObject item in AssetUtil.SelectionPrefabs()) {
 
-						AssetUtil.CreateAssetBundle (item, null, Tuner.Resource.LocationHelper.GetBundlePath () + "/assets/test1.unity3d", BuildTarget.iPhone);
+						AssetUtil.CreateAssetBundle (item, null, Tuner.LocationHelper.GetBundlePath () + "/assets/test1.unity3d", BuildTarget.iPhone);
 						Debug.Log (item.name);
 				}
 		}

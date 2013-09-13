@@ -12,6 +12,8 @@ public class test : MonoBehaviour
 		{
 				//Debug.Log (Application.dataPath);
 				//ResourceMgr.Instance.AddRequest (Tuner.Resource.LocationHelper.GetLoadFileURL ("/Assets/test1.unity3d"), "ab", ResourceCallback);
+
+				TResRoot.Instance.Init (new TResAdapter());
 				TResRoot.Instance.CheckUpdate (CheckUpdateCallback);
 				
 		}
